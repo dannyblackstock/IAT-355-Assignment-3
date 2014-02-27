@@ -5,8 +5,6 @@ d3.csv("http://www.sfu.ca/siatclass/IAT355/Spring2014/DataSets/IrisDataset.csv",
 
 function main(data) {
 
-    // var dispatch = d3.dispatch("load", "statechange");
-
     // keys used for inputs where "Species" key is not allowed
     var numericalKeys = d3.keys(data[0]);
     numericalKeys = numericalKeys.slice(0, 4);
@@ -28,7 +26,6 @@ function main(data) {
 
     var xMin = d3.min(data, function(d) { return +d["Sepal Width"];} )-minPadding;
     var yMin = d3.min(data, function(d) { return +d["Sepal Length"];} )-minPadding;
-    // console.log("xMax: " + xMax);
 
     var yScale = d3.scale.linear()
         .domain([yMin,yMax])
@@ -45,8 +42,6 @@ function main(data) {
 
     // var aspect = w / h,
     //     chart = $("svg");
-
-    // create axes
     var xAxis = d3.svg.axis()
         .scale(xScale)
         .orient("bottom")
@@ -63,106 +58,6 @@ function main(data) {
         .attr("width", w)
         .attr("height", h);
 
-    // draw the axes
-    svg.append("g") // append an SVG group
-        .attr("class", "axis")  //Assign "axis" class
-        .attr("id", "xAxis")
-        .attr("transform", "translate(0," + (h - padding) + ")") // move to bottom
-        .call(xAxis);
-
-    svg.append("g")
-        .attr("class", "axis")
-        .attr("id", "yAxis")
-        .attr("transform", "translate(" + padding + ",0)")
-        .call(yAxis);
-
-    // Create circles for the dataset
-    svg.selectAll("symbol")
-        .data(data)
-        .enter()
-        .append("path")
-        .attr("name", function(d) {return d["Species"];})
-        .attr("class", function(d) {return d["Species"];})
-        .attr("transform", function(d) { return "translate(" + xScale(d["Sepal Width"]) + "," + yScale(d["Sepal Length"]) + "), scale("+wScale(d["Petal Width"])/40+")"; })
-        .attr("fill", function(d) {
-            // change colors based on fill
-            if (d["Species"] == irisTypes[0]) {
-                return "#ff0000";
-            }
-            else if (d["Species"] == irisTypes[1]) {
-                return "#00cc00";
-            }
-            else if (d["Species"] == irisTypes[2]) {
-                return "#0000ff";
-            }
-        })
-        .attr("d", d3.svg.symbol()
-            .type(function(d) {
-            // change colors based on fill
-            if (d["Species"] == irisTypes[0]) {
-                return "cross";
-            }
-            else if (d["Species"] == irisTypes[1]) {
-                return "diamond";
-            }
-            else if (d["Species"] == irisTypes[2]) {
-                return "circle";
-            }
-            })
-            // .size(function(d) {
-            //     return wScale(d["Petal Width"]);
-            // })
-        );
-
-        // .attr("x", function(d) {
-        //     return xScale(d["Sepal Width"]);
-        // })
-
-        // .attr("y", function(d) {
-        //     return yScale(d["Sepal Length"]);
-        // })
-
-        // .attr("width", function(d) {
-        //     return wScale(d["Petal Width"]);
-        // })
-
-        // .attr("height", function(d) {
-        //     return wScale(d["Petal Width"]);
-        // })
-
-        // .attr("name", function(d) {return d["Species"];})
-
-        // .attr("fill", function(d) {
-        //     // change colors based on fill
-        //     if (d["Species"] == irisTypes[0]) {
-        //         return "#ff0000";
-        //     }
-        //     else if (d["Species"] == irisTypes[1]) {
-        //         return "#888888";
-        //     }
-        //     else if (d["Species"] == irisTypes[2]) {
-        //         return "#0000ff";
-        //     }
-        // })
-        // .attr("stroke", function(d) {
-        //     // change colors based on fill
-        //     if (d["Species"] == irisTypes[1]) {
-        //         return "#cccc00";
-        //     }
-        // })
-        // .attr("rx", function(d) {
-        //     // make virginica look like circles
-        //     if (d["Species"] == irisTypes[2]) {
-        //         return "10";
-        //     }
-        //     else {
-        //         return "0";
-        //     }
-        // })
-        // .attr("class", function(d) {return d["Species"];});
-
-    // Add controls to control area
-
     // Add container for controls
     var controlPanel = d3.select("#control-panel");
 
@@ -170,19 +65,13 @@ function main(data) {
     var typeCheckboxes = d3.selectAll(".checkbox")
             .on("click", toggleType);
 
-    // // iris type filter labels for the checkboxes
-    // var typeCheckboxLabels = controlPanel
-    //     .selectAll("label") // use the 3 types to make checkboxes
-    //     .data(irisTypes)
-    //     .enter()
-
     var xDropdown = controlPanel
-        .append("label")
+        .append("label") // append a label first
         .text("X Axis: ")
         .append("select")
         .attr("id", "xDropdown")
         .attr("name", "xDropdown")
-        .on("change", updateRects);
+        .on("change", updateSymbols);
 
     var xOptions = xDropdown.selectAll("option")
         .data(numericalKeys) // use the keys to populate the dropdown
@@ -204,7 +93,7 @@ function main(data) {
         .append("select")
         .attr("id", "yDropdown")
         .attr("name", "yDropdown")
-        .on("change", updateRects);
+        .on("change", updateSymbols);
 
     var yOptions = yDropdown.selectAll("option")
         .data(numericalKeys) // use the keys to populate the dropdown
@@ -224,7 +113,7 @@ function main(data) {
         .append("select")
         .attr("id", "sizeDropdown")
         .attr("name", "sizeDropdown")
-        .on("change", updateRects);
+        .on("change", updateSymbols);
 
     var sizeOptions = sizeDropdown.selectAll("option")
         .data(numericalKeys) // use the keys to populate the dropdown
@@ -240,22 +129,67 @@ function main(data) {
                 return "selected";
         }});
 
-    // var slider = controlPanel
-    //     .append("input")
-    //     .attr("type", "range")
-    //     .attr("min", xMin)
-    //     .attr("max", xMax)
-    //     .attr("step", 0.1)
-    //     .on("change", updateSlider);
+    createSymbols();
+    createAxes();
 
-    // $(window).on("resize", function() {
-    //     var targetWidth = chart.parent().width();
-    //     chart.attr("width", targetWidth);
-    //     chart.attr("height", targetWidth / aspect);
-    // });
+    function createAxes() {
 
-    // function to update circles when dropdowns are used
-    function updateRects() {
+        // draw the axes
+        svg.append("g") // append an SVG group
+            .attr("class", "axis")  //Assign "axis" class
+            .attr("id", "xAxis")
+            .attr("transform", "translate(0," + (h - padding) + ")") // move to bottom
+            .call(xAxis);
+
+        svg.append("g")
+            .attr("class", "axis")
+            .attr("id", "yAxis")
+            .attr("transform", "translate(" + padding + ",0)")
+            .call(yAxis);
+    }
+
+    function createSymbols() {
+        // Create symbols for the dataset
+        svg.selectAll("symbol")
+            .data(data)
+            .enter()
+            .append("path")
+            .attr("name", function(d) {return d["Species"];})
+            .attr("class", function(d) {return d["Species"];})
+            .attr("transform", function(d) { return "translate(" + xScale(d["Sepal Width"]) + "," + yScale(d["Sepal Length"]) + "), scale("+wScale(d["Petal Width"])/40+")"; })
+            .attr("fill", function(d) {
+                // change colors based on fill
+                if (d["Species"] == irisTypes[0]) {
+                    return "#ff0000";
+                }
+                else if (d["Species"] == irisTypes[1]) {
+                    return "#00cc00";
+                }
+                else if (d["Species"] == irisTypes[2]) {
+                    return "#0000ff";
+                }
+            })
+            .attr("d", d3.svg.symbol()
+                .type(function(d) {
+                // change colors based on fill
+                if (d["Species"] == irisTypes[0]) {
+                    return "cross";
+                }
+                else if (d["Species"] == irisTypes[1]) {
+                    return "diamond";
+                }
+                else if (d["Species"] == irisTypes[2]) {
+                    return "circle";
+                }
+                })
+                // .size(function(d) {
+                //     return wScale(d["Petal Width"]);
+                // })
+            );
+    }
+
+    // function to update symbols when dropdowns are used
+    function updateSymbols() {
 
         var xDropdownKey = document.getElementById("xDropdown").options[document.getElementById("xDropdown").selectedIndex].value;
         var yDropdownKey = document.getElementById("yDropdown").options[document.getElementById("yDropdown").selectedIndex].value;
@@ -269,6 +203,7 @@ function main(data) {
             .duration(200)
             .ease("quad");
 
+        // if the x dropdown changed
         if (this.id == "xDropdown") {
             max = d3.max(data, function(d) { return +d[xDropdownKey];} );
             min = d3.min(data, function(d) { return +d[xDropdownKey];} )-minPadding;
@@ -280,6 +215,7 @@ function main(data) {
             paths.attr("transform", function(d) { return "translate(" + xScale(d[xDropdownKey]) + "," + yScale(d[yDropdownKey]) + ")"; });
         }
 
+        // if the y dropdown changed
         else if (this.id == "yDropdown") {
             max = d3.max(data, function(d) { return +d[yDropdownKey];} );
             min = d3.min(data, function(d) { return +d[yDropdownKey];} )-minPadding;
@@ -291,6 +227,7 @@ function main(data) {
             paths.attr("transform", function(d) { return "translate(" + xScale(d[xDropdownKey]) + "," + yScale(d[yDropdownKey]) + ")"; });
         }
 
+        // if the size dropdown changed
         else if (this.id == "sizeDropdown") {
 
             max = d3.max(data, function(d) { return +d[sizeDropdownKey];} );
@@ -298,13 +235,9 @@ function main(data) {
                 .domain([0, max])
                 .range(sizeRange);
             console.log(max);
-            paths.attr("transform", function(d) { return "translate(" + xScale(d[xDropdownKey]) + "," + yScale(d[yDropdownKey]) + "), scale(" + wScale(d[sizeDropdownKey])/40 + ")"; });
 
-            // paths.attr("d", d3.svg.symbol()
-            //     .size(function(d) {
-            //         return wScale(d[sizeDropdownKey]);
-            //     })
-            // );
+            // scale the symbols and keep them at their current location
+            paths.attr("transform", function(d) { return "translate(" + xScale(d[xDropdownKey]) + "," + yScale(d[yDropdownKey]) + "), scale(" + wScale(d[sizeDropdownKey])/40 + ")"; });
         }
     }
 
@@ -332,16 +265,4 @@ function main(data) {
                 .style("opacity", opacity);
         }
     }
-
-    // function updateSlider() {
-    //     var rects = svg.selectAll("rect");
-
-    //     rects.filter(function(d, i) {
-    //         if (d["Sepal Width"] < this.value) {
-    //             console.log(d);
-    //             return d;
-    //         }
-    //     })
-    //     .style("opacity", 0);
-    // }
 }
