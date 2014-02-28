@@ -17,7 +17,7 @@ function drawScatterPlot(data) {
     var w = 700;
     var h = 500;
     var padding = 50;
-    var sizeRange = [5, 50];
+    var sizeRange = [10, 50];
     // pad the minimum so data points are never right on the axis
     var minPadding = 0.2;
 
@@ -206,6 +206,11 @@ function drawScatterPlot(data) {
             .duration(200)
             .ease("quad");
 
+        wMax = d3.max(data, function(d) { return +d[sizeDropdownKey];} );
+        wScale
+            .domain([0, wMax])
+            .range(sizeRange);
+
         // if the x dropdown changed
         if (this.id == "xDropdown") {
             max = d3.max(data, function(d) { return +d[xDropdownKey];} );
@@ -215,7 +220,7 @@ function drawScatterPlot(data) {
                 .range([padding, w-padding]);
             svg.select("#xAxis").transition(300).call(xAxis);
 
-            paths.attr("transform", function(d) { return "translate(" + xScale(d[xDropdownKey]) + "," + yScale(d[yDropdownKey]) + ")"; });
+            paths.attr("transform", function(d) { return "translate(" + xScale(d[xDropdownKey]) + "," + yScale(d[yDropdownKey]) + "), scale(" + wScale(d[sizeDropdownKey])/40 + ")"; });
         }
 
         // if the y dropdown changed
@@ -227,16 +232,11 @@ function drawScatterPlot(data) {
                 .range([h-padding, padding]);
             svg.select("#yAxis").transition(300).call(yAxis);
 
-            paths.attr("transform", function(d) { return "translate(" + xScale(d[xDropdownKey]) + "," + yScale(d[yDropdownKey]) + ")"; });
+            paths.attr("transform", function(d) { return "translate(" + xScale(d[xDropdownKey]) + "," + yScale(d[yDropdownKey]) + "), scale(" + wScale(d[sizeDropdownKey])/40 + ")"; });
         }
 
         // if the size dropdown changed
         else if (this.id == "sizeDropdown") {
-
-            max = d3.max(data, function(d) { return +d[sizeDropdownKey];} );
-            wScale
-                .domain([0, max])
-                .range(sizeRange);
             console.log(max);
 
             // scale the symbols and keep them at their current location

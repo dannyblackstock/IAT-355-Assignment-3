@@ -164,13 +164,13 @@ rect {
 }
 
 [type="checkbox"]:not(:checked) + label[for="versicolor-checkbox"]:before {
-    background-color: green;
-    border: 1px solid red;
+    background-color: #00cc00;
+    border: 1px solid #00cc00;
 }
 
 [type="checkbox"]:not(:checked) + label[for="setosa-checkbox"]:before {
     background-color: #f00;
-    border: 1px solid blue;
+    border: 1px solid #f00;
 }
 
 [type="checkbox"]:not(:checked) + label[for="virginica-checkbox"]:before {
@@ -223,15 +223,15 @@ svg {
 }
 
 .versicolor {
-    stroke: red;
+    stroke: #00cc00;
 }
 
 .virginica {
-    stroke: green;
+    stroke: blue;
 }
 
 .setosa {
-    stroke: blue;
+    stroke: red;
 }
 
 /* ==========================================================================

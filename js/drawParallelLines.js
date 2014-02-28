@@ -1,7 +1,9 @@
+// example code from http://bl.ocks.org/jasondavies/1341281
+
 function drawParallelLines(data){
 
   var margin = [30, 10, 10, 10],
-      w = 960 - margin[1] - margin[3],
+      w = 700 - margin[1] - margin[3],
       h = 500 - margin[0] - margin[2];
 
   var x = d3.scale.ordinal().rangePoints([0, w], 1),
