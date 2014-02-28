@@ -164,12 +164,13 @@ rect {
 }
 
 [type="checkbox"]:not(:checked) + label[for="versicolor-checkbox"]:before {
-    background-color: #888888;
-    border: 1px solid #cccc00;
+    background-color: green;
+    border: 1px solid red;
 }
 
 [type="checkbox"]:not(:checked) + label[for="setosa-checkbox"]:before {
     background-color: #f00;
+    border: 1px solid blue;
 }
 
 [type="checkbox"]:not(:checked) + label[for="virginica-checkbox"]:before {
@@ -186,6 +187,53 @@ rect {
 [type="checkbox"]:checked + label[for="virginica-checkbox"]:before {
     border-radius: 10px;
 }
+
+svg {
+  font: 10px sans-serif;
+}
+
+.background path {
+  fill: none;
+  stroke: #ccc;
+  stroke-opacity: .4;
+  shape-rendering: crispEdges;
+}
+
+.foreground path {
+  fill: none;
+  /*stroke: steelblue;*/
+  stroke-opacity: .7;
+}
+
+.brush .extent {
+  fill-opacity: .3;
+  stroke: #fff;
+  shape-rendering: crispEdges;
+}
+
+.axis line, .axis path {
+  fill: none;
+  stroke: #000;
+  shape-rendering: crispEdges;
+}
+
+.axis text {
+  text-shadow: 0 1px 0 #fff;
+  cursor: move;
+}
+
+.versicolor {
+    stroke: red;
+}
+
+.virginica {
+    stroke: green;
+}
+
+.setosa {
+    stroke: blue;
+}
+
 /* ==========================================================================
    Helper classes
    ========================================================================== */

@@ -1,9 +1,11 @@
 d3.csv("http://www.sfu.ca/siatclass/IAT355/Spring2014/DataSets/IrisDataset.csv", function(error, data){
     if (error) throw error;
-    main(data);
+
+    drawScatterPlot(data);
+    drawParallelLines(data);
 });
 
-function main(data) {
+function drawScatterPlot(data) {
 
     // keys used for inputs where "Species" key is not allowed
     var numericalKeys = d3.keys(data[0]);
@@ -55,6 +57,7 @@ function main(data) {
     // Create SVG element
     var svg = d3.select("body")
         .append("svg")
+        .attr("id", "scatter-plot")
         .attr("width", w)
         .attr("height", h);
 
