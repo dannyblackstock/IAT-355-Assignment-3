@@ -21,7 +21,9 @@ function drawParallelLines(data){
     .append("svg:g")
       .attr("transform", "translate(" + margin[3] + "," + margin[0] + ")");
 
-  d3.csv("http://www.sfu.ca/siatclass/IAT355/Spring2014/DataSets/IrisDataset.csv", function(data) {
+  drawGraph(data);
+
+  function drawGraph(data) {
 
     // Extract the list of dimensions and create a scale for each.
     x.domain(dimensions = d3.keys(data[0]).filter(function(d) {
@@ -95,11 +97,13 @@ function drawParallelLines(data){
     // Add and store a brush for each axis.
     g.append("svg:g")
         .attr("class", "brush")
-        .each(function(d) { d3.select(this).call(y[d].brush = d3.svg.brush().y(y[d]).on("brush", brush)); })
+        .each(function(d) { d3.select(this).call(y[d].brush = d3.svg.brush().y(y[d]).on("brushstart", brush)
+      .on("brush", brush)
+      .on("brushend", brush)); })
       .selectAll("rect")
         .attr("x", -8)
         .attr("width", 16);
-  });
+  }
 
   function position(d) {
     var v = dragging[d];
@@ -119,10 +123,10 @@ function drawParallelLines(data){
   function brush() {
     var actives = dimensions.filter(function(p) { return !y[p].brush.empty(); }),
         extents = actives.map(function(p) { return y[p].brush.extent(); });
-    foreground.style("display", function(d) {
-      return actives.every(function(p, i) {
-        return extents[i][0] <= d[p] && d[p] <= extents[i][1];
-      }) ? null : "none";
+        foreground.style("display", function(d) {
+          return actives.every(function(p, i) {
+          return extents[i][0] <= d[p] && d[p] <= extents[i][1];
+        }) ? null : "none";
     });
   }
 }
