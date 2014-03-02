@@ -29,7 +29,7 @@ html {
  * Customize the background color to match your design.
  */
 
-::-moz-selection {
+ ::-moz-selection {
     background: #b3d4fc;
     text-shadow: none;
 }
@@ -43,7 +43,7 @@ html {
  * A better looking default horizontal rule
  */
 
-hr {
+ hr {
     display: block;
     height: 1px;
     border: 0;
@@ -57,10 +57,10 @@ hr {
  * their containers: h5bp.com/i/440
  */
 
-audio,
-canvas,
-img,
-video {
+ audio,
+ canvas,
+ img,
+ video {
     vertical-align: middle;
 }
 
@@ -68,7 +68,7 @@ video {
  * Remove default fieldset styles.
  */
 
-fieldset {
+ fieldset {
     border: 0;
     margin: 0;
     padding: 0;
@@ -78,7 +78,7 @@ fieldset {
  * Allow only vertical resizing of textareas.
  */
 
-textarea {
+ textarea {
     resize: vertical;
 }
 
@@ -86,7 +86,7 @@ textarea {
    Browse Happy prompt
    ========================================================================== */
 
-.browsehappy {
+   .browsehappy {
     margin: 0.2em 0;
     background: #ccc;
     color: #000;
@@ -97,7 +97,7 @@ textarea {
    Author's custom styles
    ========================================================================== */
 
-body {
+   body {
     margin: 10px;
     text-align: center;
     background-color: #eee;
@@ -144,6 +144,40 @@ rect {
 
 #control-panel input[type="checkbox"] {
     display: none;
+}
+
+#tooltip {
+    position: absolute;
+    height: auto;
+    padding: 5px;
+    background-color: rgba(0,0,0,0.9);
+    color: white;
+    text-align: left;
+    pointer-events: none;
+    opacity:1;
+    transition: opacity 0.2s ease;
+}
+#tooltip:after {
+   content: '';
+    position: absolute;
+    border-style: solid;
+    border-width: 5px 5px 5px 0;
+    border-color: transparent #000000;
+    display: block;
+    width: 0;
+    z-index: 1;
+    margin-top: -5px;
+    left: -5px;
+    top: 50%;
+}
+
+#tooltip.tooltip-hidden {
+    opacity: 0;
+}
+
+#tooltip p {
+    margin: 0;
+    font-size: 11px;
 }
 
 .checkbox {
@@ -239,7 +273,7 @@ svg {
  * Image replacement
  */
 
-.ir {
+ .ir {
     background-color: transparent;
     border: 0;
     overflow: hidden;
@@ -258,7 +292,7 @@ svg {
  * Hide from both screenreaders and browsers: h5bp.com/u
  */
 
-.hidden {
+ .hidden {
     display: none !important;
     visibility: hidden;
 }
@@ -267,7 +301,7 @@ svg {
  * Hide only visually, but have it available for screenreaders: h5bp.com/v
  */
 
-.visuallyhidden {
+ .visuallyhidden {
     border: 0;
     clip: rect(0 0 0 0);
     height: 1px;
@@ -283,8 +317,8 @@ svg {
  * when navigated to via the keyboard: h5bp.com/p
  */
 
-.visuallyhidden.focusable:active,
-.visuallyhidden.focusable:focus {
+ .visuallyhidden.focusable:active,
+ .visuallyhidden.focusable:focus {
     clip: auto;
     height: auto;
     margin: 0;
@@ -297,7 +331,7 @@ svg {
  * Hide visually and from screenreaders, but maintain layout
  */
 
-.invisible {
+ .invisible {
     visibility: hidden;
 }
 
@@ -313,8 +347,8 @@ svg {
  *    `:before` to contain the top-margins of child elements.
  */
 
-.clearfix:before,
-.clearfix:after {
+ .clearfix:before,
+ .clearfix:after {
     content: " "; /* 1 */
     display: table; /* 2 */
 }
@@ -328,7 +362,7 @@ svg {
  * Include this rule to trigger hasLayout and contain floats.
  */
 
-.clearfix {
+ .clearfix {
     *zoom: 1;
 }
 
@@ -338,14 +372,14 @@ svg {
    Modify as content requires.
    ========================================================================== */
 
-@media only screen and (min-width: 35em) {
+   @media only screen and (min-width: 35em) {
     /* Style adjustments for viewports that meet the condition */
 }
 
 @media print,
-       (-o-min-device-pixel-ratio: 5/4),
-       (-webkit-min-device-pixel-ratio: 1.25),
-       (min-resolution: 120dpi) {
+(-o-min-device-pixel-ratio: 5/4),
+(-webkit-min-device-pixel-ratio: 1.25),
+(min-resolution: 120dpi) {
     /* Style adjustments for high resolution devices */
 }
 
@@ -354,7 +388,7 @@ svg {
    Inlined to avoid required HTTP connection: h5bp.com/r
    ========================================================================== */
 
-@media print {
+   @media print {
     * {
         background: transparent !important;
         color: #000 !important; /* Black prints faster: h5bp.com/s */
@@ -379,9 +413,9 @@ svg {
      * Don't show links for images, or javascript/internal links
      */
 
-    .ir a:after,
-    a[href^="javascript:"]:after,
-    a[href^="#"]:after {
+     .ir a:after,
+     a[href^="javascript:"]:after,
+     a[href^="#"]:after {
         content: "";
     }
 
