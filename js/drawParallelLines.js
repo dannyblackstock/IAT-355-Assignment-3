@@ -55,7 +55,13 @@ function drawParallelLines(data){
       .attr("class", function (d) {
           return d["Species"];
       })
-      .attr("d", path);
+      .attr("d", path)
+      .on("mouseover", function (d) {
+        showTooltip(d);
+      })
+      .on("mouseout", function () {
+        hideTooltip();
+      });
 
     // Add a group element for each dimension.
     var g = svg.selectAll(".dimension")
