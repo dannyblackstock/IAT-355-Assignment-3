@@ -153,7 +153,7 @@ function drawScatterPlot(data) {
 
     function createSymbols() {
         // Create symbols for the dataset
-        svg.selectAll("symbol")
+        var symbols = svg.selectAll("symbol")
             .data(data)
             .enter()
             .append("path")

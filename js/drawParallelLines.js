@@ -15,10 +15,13 @@ function drawParallelLines(data){
       background,
       foreground;
 
+  var symbols = d3.selectAll("body #scatter-plot path");
+
   var svg = d3.select("body").append("svg:svg")
       .attr("width", w + margin[1] + margin[3])
       .attr("height", h + margin[0] + margin[2])
-    .append("svg:g")
+      .attr("id", "parallel-lines")
+      .append("svg:g")
       .attr("transform", "translate(" + margin[3] + "," + margin[0] + ")");
 
   drawGraph(data);
@@ -121,12 +124,19 @@ function drawParallelLines(data){
 
   // Handles a brush event, toggling the display of foreground lines.
   function brush() {
-    var actives = dimensions.filter(function(p) { return !y[p].brush.empty(); }),
-        extents = actives.map(function(p) { return y[p].brush.extent(); });
-        foreground.style("display", function(d) {
-          return actives.every(function(p, i) {
-          return extents[i][0] <= d[p] && d[p] <= extents[i][1];
-        }) ? null : "none";
+    var actives = dimensions.filter(function(p) { return !y[p].brush.empty(); });
+    var extents = actives.map(function(p) { return y[p].brush.extent(); });
+
+    foreground.style("display", function(d) {
+      return actives.every(function(p, i) {
+        return extents[i][0] <= d[p] && d[p] <= extents[i][1];
+      }) ? null : "none";
+    });
+
+    symbols.style("display", function(d) {
+      return actives.every(function(p, i) {
+        return extents[i][0] <= d[p] && d[p] <= extents[i][1];
+      }) ? null : "none";
     });
   }
 }

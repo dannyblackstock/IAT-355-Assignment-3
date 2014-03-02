@@ -175,9 +175,6 @@ rect {
 
 [type="checkbox"]:not(:checked) + label[for="virginica-checkbox"]:before {
     background-color: #00f;
-    -webkit-border-radius: 10px;
-    -moz-border-radius: 10px;
-    border-radius: 10px;
 }
 
 [type="checkbox"]:checked + .checkbox:before {
