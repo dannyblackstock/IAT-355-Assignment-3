@@ -5,14 +5,19 @@ function showTooltip(d){
 
   var tooltip = d3.select("#tooltip");
   var symbols = d3.selectAll("body #scatter-plot path:not(.domain)");
+  var lines = d3.selectAll(".foreground path:not(.domain)");
 
-  var circleUnderMouse = d;
+  var underMouse = d;
 
   symbols.filter(function(d) {
-    return (d !== circleUnderMouse);
+    return (d !== underMouse);
   })
-  .transition().style('opacity','0.2');
+  .style('opacity','0.1');
 
+  lines.filter(function(d) {
+    return (d !== underMouse);
+  })
+  .style('opacity','0');
   // d3.select(d).style('opacity','1.0');
 
   //Update the tooltip values
@@ -41,7 +46,9 @@ function showTooltip(d){
 
 function hideTooltip() {
   var symbols = d3.selectAll("body #scatter-plot path:not(.domain)");
+  var lines = d3.selectAll(".foreground path:not(.domain)");
 
   d3.select("#tooltip").classed("tooltip-hidden", true);
-  symbols.transition().style('opacity','1');
+  symbols.style('opacity','1');
+  lines.style('opacity','1');
 }
