@@ -252,19 +252,31 @@ function drawScatterPlot(data) {
             .duration(200)
             .ease("quad");
 
+        //parallel lines
+        var parallelLines = d3.selectAll("#parallel-lines .foreground path")
+            .transition()
+            .duration(200)
+            .ease("quad");
+
         // show/hide using opacity property depending if the checkbox is checked or not
         opacity = $('#' + this.htmlFor).is(":checked") ? "1" : "0";
 
         if (this.htmlFor == ""+irisTypes[0]+"-checkbox") {
             path.filter("[name=\""+irisTypes[0]+"\"]")
                 .style("opacity", opacity);
+            parallelLines.filter("[class=\""+irisTypes[0]+"\"]")
+                .style("opacity", opacity);
         }
         else if (this.htmlFor == ""+irisTypes[1]+"-checkbox") {
             path.filter("[name=\""+irisTypes[1]+"\"]")
                 .style("opacity", opacity);
+            parallelLines.filter("[class=\""+irisTypes[1]+"\"]")
+                .style("opacity", opacity);
         }
         else if (this.htmlFor == ""+irisTypes[2]+"-checkbox") {
             path.filter("[name=\""+irisTypes[2]+"\"]")
+                .style("opacity", opacity);
+            parallelLines.filter("[class=\""+irisTypes[2]+"\"]")
                 .style("opacity", opacity);
         }
     }

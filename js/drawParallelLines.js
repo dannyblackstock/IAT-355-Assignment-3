@@ -15,6 +15,7 @@ function drawParallelLines(data){
       background,
       foreground;
 
+  //symbols from the scatter plot
   var symbols = d3.selectAll("body #scatter-plot path");
 
   var svg = d3.select("body").append("svg:svg")
