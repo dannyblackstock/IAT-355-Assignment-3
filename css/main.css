@@ -247,9 +247,16 @@ svg {
   fill: none;
   /*stroke: steelblue;*/
   stroke-opacity: .7;
+  stroke-width: 1.5;
 }
 
-.brush .extent {
+/*.brush .extent {
+  fill-opacity: .3;
+  stroke: #fff;
+  shape-rendering: crispEdges;
+}*/
+
+rect.extent {
   fill-opacity: .3;
   stroke: #fff;
   shape-rendering: crispEdges;
