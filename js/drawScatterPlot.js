@@ -71,6 +71,15 @@ function drawScatterPlot(data) {
     .attr("width", w)
     .attr("height", h);
 
+ var brush = d3.svg.brush()
+    .x(xScale)
+    .y(yScale)
+    .on("brushstart", brushstart)
+    .on("brush", brushCb)
+    .on("brushend", brushend);
+
+    svg.call(brush);
+
   // Add container for controls
   var controlPanel = d3.select("#control-panel");
 
@@ -295,7 +304,7 @@ function drawScatterPlot(data) {
 
   //  function to hide data points based on user controlled filters (checkboxes)
   function toggleType() {
-    console.log(this);
+    // console.log(this);
     var path = svg.selectAll("path")
       .transition()
       .duration(200)
@@ -308,23 +317,57 @@ function drawScatterPlot(data) {
       .ease("quad");
 
     // show/hide using opacity property depending if the checkbox is checked or not
-    opacity = $('#' + this.htmlFor).is(":checked") ? "1" : "0";
+    display = $('#' + this.htmlFor).is(":checked") ? "block" : "none";
 
     if (this.htmlFor == "" + irisTypes[0] + "-checkbox") {
       path.filter("[name=\"" + irisTypes[0] + "\"]")
-        .style("opacity", opacity);
+        .style("display", display);
       parallelLines.filter("[class=\"" + irisTypes[0] + "\"]")
-        .style("opacity", opacity);
+        .style("display", display);
     } else if (this.htmlFor == "" + irisTypes[1] + "-checkbox") {
       path.filter("[name=\"" + irisTypes[1] + "\"]")
-        .style("opacity", opacity);
+        .style("display", display);
       parallelLines.filter("[class=\"" + irisTypes[1] + "\"]")
-        .style("opacity", opacity);
+        .style("display", display);
     } else if (this.htmlFor == "" + irisTypes[2] + "-checkbox") {
       path.filter("[name=\"" + irisTypes[2] + "\"]")
-        .style("opacity", opacity);
+        .style("display", display);
       parallelLines.filter("[class=\"" + irisTypes[2] + "\"]")
-        .style("opacity", opacity);
+        .style("display", display);
     }
   }
+
+function brushstart() {
+  var svgs = d3.selectAll("svg");
+  svgs.classed("selecting", true);
+}
+
+function brushCb() {
+    var symbols = d3.selectAll("body #scatter-plot path:not(.domain)");
+    var lines = d3.selectAll(".foreground path:not(.domain)");
+
+    //get active dimensions
+    var xDropdownKey = document.getElementById("xDropdown").options[document.getElementById("xDropdown").selectedIndex].value;
+    var yDropdownKey = document.getElementById("yDropdown").options[document.getElementById("yDropdown").selectedIndex].value;
+
+    var extent = brush.extent();
+
+    var x0 = extent[0][0],
+        y0 = extent[0][1],
+        x1 = extent[1][0],
+        y1 = extent[1][1];
+
+      symbols.classed("selected",function(d) {
+        return (x0 <= d[xDropdownKey] && d[xDropdownKey] <= x1 && y0 <= d[yDropdownKey] && d[yDropdownKey] <= y1);
+      });
+
+      lines.classed("selected",function(d) {
+        return (x0 <= d[xDropdownKey] && d[xDropdownKey] <= x1 && y0 <= d[yDropdownKey] && d[yDropdownKey] <= y1);
+      });
+    }
+}
+
+function brushend() {
+  var svgs = d3.selectAll("svg");
+  svgs.classed("selecting", !d3.event.target.empty());
 }

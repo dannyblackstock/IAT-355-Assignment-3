@@ -14,11 +14,21 @@ function showTooltip(d){
   })
   .style('opacity','0.1');
 
+  symbols.filter(function(d) {
+    return (d == underMouse);
+  })
+  .style('opacity','1');
+
   lines.filter(function(d) {
     return (d !== underMouse);
   })
   .style('opacity','0');
-  // d3.select(d).style('opacity','1.0');
+
+  lines.filter(function(d) {
+    return (d == underMouse);
+  })
+  .style('opacity','1');
+
 
   //Update the tooltip values
   tooltip.select("#species")
@@ -49,6 +59,6 @@ function hideTooltip() {
   var lines = d3.selectAll(".foreground path:not(.domain)");
 
   d3.select("#tooltip").classed("tooltip-hidden", true);
-  symbols.style('opacity','1');
-  lines.style('opacity','1');
+  symbols.style('opacity',null);
+  lines.style('opacity',null);
 }

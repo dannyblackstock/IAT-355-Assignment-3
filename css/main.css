@@ -103,6 +103,19 @@ html {
     background-color: #eee;
     font-family: "Helvetica", sans-serif;
 }
+.selecting path:not(.domain){
+    opacity: .1;
+}
+
+.selecting path.selected{
+    opacity: 1;
+}
+.selecting g .foreground path{
+    opacity: .1;
+}
+.selecting g .foreground path.selected{
+    opacity: 1;
+}
 
 .axis path,
 .axis line {
