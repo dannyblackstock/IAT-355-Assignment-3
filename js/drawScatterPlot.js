@@ -1,10 +1,3 @@
-d3.csv("http://www.sfu.ca/siatclass/IAT355/Spring2014/DataSets/IrisDataset.csv", function (error, data) {
-  if (error) throw error;
-
-  drawScatterPlot(data);
-  drawParallelLines(data);
-});
-
 function drawScatterPlot(data) {
 
   // keys used for inputs where "Species" key is not allowed
@@ -14,10 +7,11 @@ function drawScatterPlot(data) {
   // the 3 iris types
   var irisTypes = ["setosa", "versicolor", "virginica"];
 
-  var w = 700;
+  var w = 500;
   var h = 500;
-  var padding = 50;
+  var padding = 30;
   var sizeRange = [10, 50];
+
   // pad the minimum so data points are never right on the axis
   var minPadding = 0.2;
 
@@ -25,9 +19,11 @@ function drawScatterPlot(data) {
   var xMax = d3.max(data, function (d) {
     return +d["Sepal Width"];
   });
+
   var yMax = d3.max(data, function (d) {
     return +d["Sepal Length"];
   });
+
   var wMax = d3.max(data, function (d) {
     return +d["Petal Width"];
   });
@@ -35,6 +31,7 @@ function drawScatterPlot(data) {
   var xMin = d3.min(data, function (d) {
     return +d["Sepal Width"];
   }) - minPadding;
+
   var yMin = d3.min(data, function (d) {
     return +d["Sepal Length"];
   }) - minPadding;
@@ -52,8 +49,7 @@ function drawScatterPlot(data) {
     .domain([0, wMax])
     .range(sizeRange);
 
-  // var aspect = w / h,
-  //     chart = $("svg");
+  // Axex variables
   var xAxis = d3.svg.axis()
     .scale(xScale)
     .orient("bottom")
@@ -71,14 +67,15 @@ function drawScatterPlot(data) {
     .attr("width", w)
     .attr("height", h);
 
- var brush = d3.svg.brush()
+  // Create scatter plot brush
+  var brush = d3.svg.brush()
     .x(xScale)
     .y(yScale)
     .on("brushstart", brushstart)
     .on("brush", brushCb)
     .on("brushend", brushend);
 
-    svg.call(brush);
+  svg.call(brush);
 
   // Add container for controls
   var controlPanel = d3.select("#control-panel");
@@ -87,9 +84,11 @@ function drawScatterPlot(data) {
   var typeCheckboxes = d3.selectAll(".checkbox")
     .on("click", toggleType);
 
+// ---- Start of code for creating scatter plot dropdowns ----- //
+
   var xDropdown = controlPanel
     .append("label") // append a label first
-  .text("X Axis: ")
+    .text("Scatter Plot X Axis: ")
     .append("select")
     .attr("id", "xDropdown")
     .attr("name", "xDropdown")
@@ -165,6 +164,8 @@ function drawScatterPlot(data) {
       }
     });
 
+// ----- End of code for creating scatter plot dropdowns. ----- //
+
   createSymbols();
   createAxes();
 
@@ -213,9 +214,9 @@ function drawScatterPlot(data) {
       .on("mouseover", function (d) {
         showTooltip(d);
       })
-      .on("mouseout", function() {
+      .on("mouseout", function () {
         hideTooltip();
-    })
+      })
       .attr("d", d3.svg.symbol()
         .type(function (d) {
           // change colors based on fill
@@ -227,9 +228,6 @@ function drawScatterPlot(data) {
             return "circle";
           }
         })
-        // .size(function(d) {
-        //     return wScale(d["Petal Width"]);
-        // })
     );
   }
 
@@ -337,12 +335,14 @@ function drawScatterPlot(data) {
     }
   }
 
-function brushstart() {
-  var svgs = d3.selectAll("svg");
-  svgs.classed("selecting", true);
-}
+// brush functions
+  function brushstart() {
+    var svgs = d3.selectAll("svg");
+    // add sleecting classs to the two charts when selecting
+    svgs.classed("selecting", true);
+  }
 
-function brushCb() {
+  function brushCb() {
     var symbols = d3.selectAll("body #scatter-plot path:not(.domain)");
     var lines = d3.selectAll(".foreground path:not(.domain)");
 
@@ -353,21 +353,23 @@ function brushCb() {
     var extent = brush.extent();
 
     var x0 = extent[0][0],
-        y0 = extent[0][1],
-        x1 = extent[1][0],
-        y1 = extent[1][1];
+      y0 = extent[0][1],
+      x1 = extent[1][0],
+      y1 = extent[1][1];
 
-      symbols.classed("selected",function(d) {
-        return (x0 <= d[xDropdownKey] && d[xDropdownKey] <= x1 && y0 <= d[yDropdownKey] && d[yDropdownKey] <= y1);
-      });
+    // add "selected" class to selected objects when selected
+    symbols.classed("selected", function (d) {
+      return (x0 <= d[xDropdownKey] && d[xDropdownKey] <= x1 && y0 <= d[yDropdownKey] && d[yDropdownKey] <= y1);
+    });
 
-      lines.classed("selected",function(d) {
-        return (x0 <= d[xDropdownKey] && d[xDropdownKey] <= x1 && y0 <= d[yDropdownKey] && d[yDropdownKey] <= y1);
-      });
-    }
-}
+    lines.classed("selected", function (d) {
+      return (x0 <= d[xDropdownKey] && d[xDropdownKey] <= x1 && y0 <= d[yDropdownKey] && d[yDropdownKey] <= y1);
+    });
+  }
 
-function brushend() {
-  var svgs = d3.selectAll("svg");
-  svgs.classed("selecting", !d3.event.target.empty());
+  function brushend() {
+    // remove selected class from charts when selecting ends and if the selection is empty
+    var svgs = d3.selectAll("svg");
+    svgs.classed("selecting", !d3.event.target.empty());
+  }
 }
